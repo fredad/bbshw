@@ -1,0 +1,63 @@
+<% include ./includes/header.ejs %>
+
+<div class="container">
+		<div class='jumbotron'>
+			<h1>Bulletin Board!</h1>
+<!-- 			<p>Post your comments here!</p> -->
+		</div>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#postmodal">
+		  Click To Post
+		</button>
+		<div class="modal fade" id="postmodal" tabindex="-1" role="dialog" aria-labelledby="postmodal" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h3 class="modal-title" id="exampleModalLabel">Post your comments here!</h3>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div id='postblogs'  class="form-group">
+				<form action="/add" method="post" class="form-group">
+	  			<label for="title">Title:</label><br>
+	  			<input type="text" name= 'title' id='title' class="form-control"><br>
+	  			<label for="body">Content:</label><br>
+	 			 <textarea type="text" name='body' id='body' class="form-control" rows="5" ></textarea><br>
+				<button class="btn btn-primary" id='submit'>submit</button>
+				</form>
+				</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<hr/>
+		<div class="panel-group" id="accordion">
+		<h3 class="display-4">All posts:</h3>
+		<p class="text-muted">Click on title to see content </p>
+		<% for (var i = 0; i < result.length; i++) { %>
+		   <div class="panel panel-default">
+		   	<div class="panel-heading">
+	        <h4 class="panel-title">
+	        	<a data-toggle="collapse" data-parent="#accordion" href="#<%=result[i].id %>"><%= result[i].title %></a>
+	        </h4>
+	   		</div>
+	   		<% if (i == 0){ %>
+	        <div id="<%=result[i].id %>" class="panel-collapse collapse in">
+	        <% } else { %>
+	        <div id="<%=result[i].id %>" class="panel-collapse collapse">
+	        <% } %>
+	        <div class="panel-body"><p><%= result[i].body %></p>
+	        <form action="/delete" method="post">
+	        	<button class="btn" name='<%= result[i].id %>'>Delete</button>
+			</form></div>
+
+	   		</div>
+
+			</div>
+		<% } %>
+		</div>
+		<hr/>
+</div>
+
+<% include ./includes/footer.ejs %>
