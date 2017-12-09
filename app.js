@@ -9,9 +9,15 @@ app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-const connectionString = 'postgres://' + 
-process.env.POSTGRES_USER +':'+
-process.env.POSTGRES_PASSWORD+'@localhost/bulletinboard';
+var connectionString;
+
+if(process.env.DATABASE_URL){
+  connectionString = process.env.DATABASE_URL
+} else {
+  connectionString = 'postgres://' + 
+  process.env.POSTGRES_USER +':'+
+  process.env.POSTGRES_PASSWORD+'@localhost/bulletinboard';
+}
 
 const pool = new pg.Pool(typeof connectionString === 'string' ? parseConnectionString.parse(connectionString) : connectionString);
 
@@ -83,7 +89,9 @@ app.get('*', function(req, res) {
     res.status(404).send('<h1>uh oh! page not found!</h1>');
 });
 
+var PORT = process.env.PORT || 3000;
+
 //have the application listen on a specific port
-app.listen(3000, function () {
+app.listen(PORT, function () {
     console.log('Example app listening on port 3000!');
 });
